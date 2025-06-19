@@ -1,2 +1,2 @@
 # YALI-OS
-Custom Linux kernel built with x86asm and C with interactive shell and bootloader
+YALI-OS is an interactive, multitasking operating system with a custom kernel and shell. 
