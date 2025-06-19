@@ -1,7 +1,17 @@
-ORG 0x7c00
+ORG 0
 BITS 16
 
+jmp 0x7c0: start
+
 start: 
+    cli 
+    mov ax, 0x7c0 
+    mov ds, ax
+    mov es, ax
+    mov ax, 0x00
+    mov ss, ax
+    mov sp, 0x7c00
+    sti 
     mov si, message
     call print 
     jmp $
@@ -9,10 +19,10 @@ start:
 print: 
 .loop:
     mov bx, 0 
-    lodsb # bu command al registerina depoluyo point edilen chari 
-    cmp al, 0 # 0 mi diye bakar degilse devam eder
+    lodsb 
+    cmp al, 0 
     je .done
-    call print_char # bitmediyse print eder al'deki chari 
+    call print_char 
     jmp .loop
 .done:
     ret 
@@ -20,9 +30,9 @@ print:
 
 print_char: 
     mov ah, 0eh 
-    int 0x10  # bu da bios commandi bir sey basmak icin 
+    int 0x10  
     ret
-message: db 'Hello World!', 0 # bu simdi al registerinda depolu yani her char nereye point ediyosa 
+message: db 'Hello World!', 0 
 
-times 510-($ - $$) db 0 # 510 byte degilse kalanlari sifirla doldurmak icin bu da
+times 510-($ - $$) db 0 
 dw 0xAA55
