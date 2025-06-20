@@ -30,7 +30,7 @@ start2:
     or eax, 0x1
     mov cr0, eax
     jmp CODE_SEG:load32 ; switches to the code selector and jumps to load32 abs address
-
+    
 
 ; Global Descriptor Table 
 ; Information to the CPU about the memory segments
@@ -65,25 +65,77 @@ gdt_descriptor:
     dw gdt_end - gdt_start - 1 ; size
     dd gdt_start               ; offset
 
-
-[BITS 32] ; everything under here is seen as 32 bit code 
-
+[BITS 32]
 load32: 
-    mov ax, DATA_SEG
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    mov ebp, 0x00200000 ;BASE POINTER
-    mov esp, ebp
+    mov eax, 1
+    mov ecx, 100
+    mov edi, 0x0100000
+    call ata_lba_read
+    jmp CODE_SEG:0x0100000
 
-    ;Enable the A20 line 
-    in al, 0x92
-    or al, 2
-    out 0x92, al
+ata_lba_read: 
+    mov ebx, eax ; Backup the LBA
+    ;Send the highest 8 bits of the LBA to the hard disk controller 
+    shr eax, 24
+    or eax, 0xE0 ; Select the master drive not the slave drive 
+    mov dx, 0x1F6
+    out dx, al
+    ; Finished sending the highest 8 bits of the LBA
 
-    jmp $
+    ; Send the total sectors to read 
+    mov eax, ecx 
+    mov dx, 0x1F2
+    out dx, al
+    ; Finished sending the total sectors to read 
+
+    ; Send more bits of the LBA
+    mov eax, ebx ; Restore the LBA 
+    mov dx, 0x1F3
+    out dx, al
+    ; Finished sending more bits of the LBA
+
+    ; Send more bits of the LBA 
+    mov dx, 0x1F4
+    mov eax, ebx ; Restore the backup LBA 
+    shr eax, 8
+    out dx, al
+    ; Finished sending more bits of the LBA 
+
+    ;Send the upper 16 bits of the LBA 
+    mov dx, 0x1F5
+    mov eax, ebx ;restore 
+    shr eax, 16 
+    out dx, al
+
+    ;Finished sendin the upper 16 bits of the LBA 
+
+    mov dx, 0x1F7
+    mov al, 0x20
+    out dx, al
+
+    ; Read all sectors into memory 
+.next_sector: 
+    push ecx
+
+; Checking if we need to read
+.try_again: 
+    mov dx, 0x1F7
+    in al, dx 
+    test al, 8
+    jz .try_again
+
+;We need to read 256 words at a time 
+    mov ecx, 256 
+    mov dx, 0x1F0
+    rep insw ;Reads from the port specified in dx into the place specified in EDI 
+    pop ecx 
+    loop .next_sector 
+
+    ;End of reading sectors into mem 
+    ret 
+
+
+
 
 times 510-($ - $$) db 0 
 dw 0xAA55
