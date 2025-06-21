@@ -4,5 +4,10 @@
     "editorGutter.modifiedBackground": "#00000000",
     "editorGutter.addedBackground": "#00000000",
     "editorGutter.deletedBackground": "#00000000"
+},
+"files.associations": {
+    "stdint.h": "c",
+    "memory.h": "c",
+    "config.h": "c"
 }
 }

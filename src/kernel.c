@@ -1,6 +1,7 @@
 #include "kernel.h"
 #include <stddef.h>
 #include <stdint.h>
+#include "idt/idt.h"
 
 
 uint16_t* video_mem = 0;
@@ -72,9 +73,13 @@ void print(const char* str)
     }
 }
 
+
 void kernel_main()
 {
     terminal_initialize();
     print("YALI OPERATING SYSTEM\n YERLI VE MILLI");
 
-} 
+    //INITIALIZE THE INTERRUPT DESCRIPTOR TABLE 
+    idt_init();
+
+}
