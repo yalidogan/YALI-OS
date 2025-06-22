@@ -79,10 +79,8 @@ void kernel_main()
     terminal_initialize();
     print("YALI OPERATING SYSTEM\n YERLI VE MILLI");
 
-    //INITIALIZE THE INTERRUPT DESCRIPTOR TABLE 
+    //Init the interrupt descriptor table 
     idt_init();
-
-    outb(0x60, 0xff);
     
 
 }
