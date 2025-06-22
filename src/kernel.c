@@ -85,5 +85,8 @@ void kernel_main()
 
     //Init the interrupt descriptor table 
     idt_init();
+
+    //Enable the interrupts after we init the IDT -> so that system doesn't panic 
+    enable_interrupts(); 
     
 }
