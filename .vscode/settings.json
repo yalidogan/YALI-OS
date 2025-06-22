@@ -8,6 +8,8 @@
 "files.associations": {
     "stdint.h": "c",
     "memory.h": "c",
-    "config.h": "c"
+    "config.h": "c",
+    "status.h": "c",
+    "stddef.h": "c"
 }
 }
