@@ -10,6 +10,8 @@
     "memory.h": "c",
     "config.h": "c",
     "status.h": "c",
-    "stddef.h": "c"
+    "stddef.h": "c",
+    "kheap.h": "c",
+    "paging.h": "c"
 }
 }
