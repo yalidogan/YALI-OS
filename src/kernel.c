@@ -6,6 +6,8 @@
 #include "memory/heap/kheap.h"
 #include "memory/paging/paging.h"
 #include "disk/disk.h"
+#include "fs/pparser.h"
+#include "string/string.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -56,20 +58,10 @@ void terminal_initialize()
     }
 }
 
-size_t str_len(const char* str)
-{
-    size_t len = 0;
-    while(str[len])
-    {
-        len++;
-    }
-
-    return len;
-}
 
 void print(const char* str)
 {
-    size_t len = str_len(str);
+    size_t len = strlen(str);
     for(int i = 0; i < len; i++)
     {
         terminal_writechar(str[i], 15);
@@ -103,5 +95,11 @@ void kernel_main()
 
     //Enable the interrupts after we init the IDT and other operations -> so that system doesn't panic 
     enable_interrupts(); 
+
+    struct path_root* root_path = pathparser_parse("0:/bin/shell.exe", NULL);
+    if(root_path)
+    {
+
+    }
     
 } 
