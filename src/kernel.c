@@ -9,6 +9,7 @@
 #include "fs/pparser.h"
 #include "string/string.h"
 #include "disk/streamer.h"
+#include "fs/file.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -74,10 +75,13 @@ static struct paging_4gb_chunk* kernel_chunk = 0;
 void kernel_main()
 {
     terminal_initialize();
-    print("YALI OPERATING SYSTEM\n YERLI VE MILLI");
+    print("YALI OPERATING SYSTEM\nYERLI VE MILLI");
 
     //Init the heap 
     kheap_init();
+
+    //Init filesystems 
+    fs_init(); 
 
     //Seach and initialize the disks 
     disk_search_and_init(); 
@@ -97,13 +101,8 @@ void kernel_main()
     //Enable the interrupts after we init the IDT and other operations -> so that system doesn't panic 
     enable_interrupts(); 
 
-    struct disk_stream* stream = diskstreamer_new(0);
-    diskstreamer_seek(stream, 0x201);
-    unsigned char c = 0; 
-    diskstreamer_read(stream, &c, 1);
-    while(1)
-    {
-        
-    }
+    char buf[20];
+    strcpy(buf, "hello!");
+    while(1){}
 
 } 

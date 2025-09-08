@@ -12,6 +12,7 @@
     "status.h": "c",
     "stddef.h": "c",
     "kheap.h": "c",
-    "paging.h": "c"
+    "paging.h": "c",
+    "fat16.h": "c"
 }
 }
