@@ -13,6 +13,7 @@
     "stddef.h": "c",
     "kheap.h": "c",
     "paging.h": "c",
-    "fat16.h": "c"
+    "fat16.h": "c",
+    "stdbool.h": "c"
 }
 }
